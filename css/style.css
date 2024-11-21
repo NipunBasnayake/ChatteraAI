@@ -12,7 +12,10 @@
 }
 
 .custom-divider {
-    border-color: #444c56;
+    border-color: #58a6ff;
+    border-width: 2px;
+    border-style: solid;
+    margin-top: 30px;
 }
 
 .custom-input {
@@ -43,4 +46,20 @@
 
 .custom-button:active {
     background-color: #387ec7;
+}
+
+.custom-chatbox{
+    max-height: 650px;
+}
+
+#messageDiv {
+    margin-top: 0;
+    padding-top: 0;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+}
+
+#messageDiv::-webkit-scrollbar {
+    display: none;
 }
