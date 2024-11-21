@@ -1,0 +1,8 @@
+.chatBox{
+    overflow-y: scroll;
+    height: 720px;
+    max-height: 720px;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #636363;
+}
