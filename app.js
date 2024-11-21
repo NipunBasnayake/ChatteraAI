@@ -1,70 +1,90 @@
-// ------------------- Dropdown Buttons -------------------
-let senderButton = document.getElementById("senderButton");
-let dropItem1 = document.getElementById("dropItem1");
-let dropItem2 = document.getElementById("dropItem2");
-
-dropItem1.addEventListener("click", (e) => {
-    e.preventDefault();
-    senderButton.value = dropItem1.textContent;
-});
-
-dropItem2.addEventListener("click", (e) => {
-    e.preventDefault();
-    senderButton.value = dropItem2.textContent;
-});
-
 // ------------------- Message Functions -------------------
 let chatsArray = [];
-
 let messageDiv = document.getElementById("messageDiv");
 
-function send() {
-    let senderButtonValue = senderButton.value;
+async function send() {
     let txtMessage = document.getElementById("txtMessage").value;
     let time = getTime();
-    chatsArray.push({ senderButtonValue, txtMessage });
+    chatsArray.push({ sender: "Me", message: txtMessage });
 
+    addMessage("Me", txtMessage, time);
+
+    let aiResponse = await getAIResponse(txtMessage);
+    addMessage("AI", aiResponse, getTime());
+}
+
+// ------------------- Add Message -------------------
+function addMessage(sender, message, time) {
     let avatarURL, textAlignment, bubbleClass, bubbleAlignment, timeColor;
 
-    if (senderButtonValue === "Sender 1") {
+    if (sender === "Me") {
         avatarURL = "https://randomuser.me/api/portraits/men/1.jpg";
         textAlignment = "text-end";
         bubbleClass = "bg-secondary text-white";
         bubbleAlignment = "ms-auto";
         timeColor = "text-white";
-    } else if(senderButtonValue === "Sender 2"){
+    } else if (sender === "AI") {
         avatarURL = "https://randomuser.me/api/portraits/women/1.jpg";
         textAlignment = "text-end";
         bubbleClass = "bg-white text-dark";
         bubbleAlignment = "me-auto";
         timeColor = "text-dark";
     }
-    if (senderButtonValue!="Select Sender") {
-        let messageHTML = `
-        <div class="message-bubble ${bubbleClass} ${bubbleAlignment} w-100 rounded-2 p-3 mt-3">
-            <div class="d-flex ${textAlignment} mb-2">
-                <img src="${avatarURL}" class="rounded-circle" width="30" height="30" alt="${senderButtonValue}" />
-                <p class="fw-bold ms-2 mb-0">${senderButtonValue}</p>
-            </div>
-            <p class="text-start">${txtMessage}</p>
-            <p class="${textAlignment} ${timeColor} text-muted" style="font-size: 0.8rem;">${time}</p>
+
+    let messageHTML = `
+    <div class="message-bubble ${bubbleClass} ${bubbleAlignment} w-100 rounded-2 p-3 mt-3">
+        <div class="d-flex ${textAlignment} mb-2">
+            <img src="${avatarURL}" class="rounded-circle" width="30" height="30" alt="${sender}" />
+            <p class="fw-bold ms-2 mb-0">${sender}</p>
         </div>
+        <p class="text-start">${message}</p>
+        <p class="${textAlignment} ${timeColor} text-muted" style="font-size: 0.8rem;">${time}</p>
+    </div>
     `;
 
     messageDiv.innerHTML += messageHTML;
     messageDiv.scrollTop = messageDiv.scrollHeight;
-    }
 }
 
-
-
-
-//  ------------------- Get Time -------------------
+// ------------------- Get Time -------------------
 function getTime() {
     let date = new Date();
-    let hours = new Date().getHours();
-    let minutes = new Date().getMinutes();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
     let ampm = hours >= 12 ? 'PM' : 'AM';
-    let time = hours + "." + minutes + " " + ampm;
+    hours = hours % 12 || 12;
+    let time = hours + ":" + (minutes < 10 ? "0" : "") + minutes + " " + ampm;
     return time;
 }
+
+// ------------------- Fetch AI Response -------------------
+async function getAIResponse(userMessage) {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+        "contents": [
+            {
+                "parts": [
+                    {
+                        "text": userMessage
+                    }
+                ]
+            }
+        ]
+    });
+
+    const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+    };
+
+    let response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=", requestOptions);
+    let result = await response.json();
+    let aiMessage = result.candidates[0].content.parts[0].text;
+
+    return aiMessage;
+}
+
