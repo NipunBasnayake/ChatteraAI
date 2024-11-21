@@ -1,8 +1,46 @@
-.chatBox{
-    overflow-y: scroll;
-    height: 720px;
-    max-height: 720px;
-    border-radius: 10px;
-    padding: 20px;
-    border: 1px solid #636363;
+.custom-body {
+    color: #e1e4e8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.custom-header {
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.custom-divider {
+    border-color: #444c56;
+}
+
+.custom-input {
+    background-color: #2c3138;
+    border: 1px solid #444c56;
+    border-radius: 50px;
+    color: #e1e4e8;
+    font-size: 1.1rem;
+    padding: 12px 15px;
+    width: 100%;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.custom-input:focus {
+    border-color: #58a6ff;
+    outline: none;
+}
+
+.custom-button {
+    background-color: #58a6ff;
+    border: none;
+    color: white;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.custom-button:active {
+    background-color: #387ec7;
 }

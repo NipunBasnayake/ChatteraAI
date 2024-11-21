@@ -14,7 +14,6 @@ dropItem2.addEventListener("click", (e) => {
 });
 
 // ------------------- Message Functions -------------------
-
 let chatsArray = [];
 
 let messageDiv = document.getElementById("messageDiv");
@@ -22,43 +21,50 @@ let messageDiv = document.getElementById("messageDiv");
 function send() {
     let senderButtonValue = senderButton.value;
     let txtMessage = document.getElementById("txtMessage").value;
-
+    let time = getTime();
     chatsArray.push({ senderButtonValue, txtMessage });
-    
-    console.log(time);
 
-    let messageHTML = ``;
+    let avatarURL, textAlignment, bubbleClass, bubbleAlignment, timeColor;
 
-    if (senderButtonValue == "Sender 1") {
-
-        messageHTML =   `<div class="bg-black text-white w-50 rounded-2 ms-auto p-3 mt-3">
-                            <p class="text-start fw-bold">${senderButtonValue}</p>
-                            <p class="text-start">${txtMessage}</p>
-                            <p class="text-end">${time}</p>
-                        </div>`;
-
-    } else if (senderButtonValue == "Sender 2") {
-
-        messageHTML =   `<div class="bg-white text-dark w-50 rounded-2 me-auto p-3 mt-3">
-                            <p class="text-start fw-bold">${senderButtonValue}</p>
-                            <p class="text-start">${txtMessage}</p>
-                            <p class="text-end">${time}</p>
-                        </div>`;
-
-    } else if (senderButtonValue == "Select Sender") {
-        alert("Select a Sender");
+    if (senderButtonValue === "Sender 1") {
+        avatarURL = "https://randomuser.me/api/portraits/men/1.jpg";
+        textAlignment = "text-end";
+        bubbleClass = "bg-secondary text-white";
+        bubbleAlignment = "ms-auto";
+        timeColor = "text-white";
+    } else if(senderButtonValue === "Sender 2"){
+        avatarURL = "https://randomuser.me/api/portraits/women/1.jpg";
+        textAlignment = "text-end";
+        bubbleClass = "bg-white text-dark";
+        bubbleAlignment = "me-auto";
+        timeColor = "text-dark";
     }
+    if (senderButtonValue!="Select Sender") {
+        let messageHTML = `
+        <div class="message-bubble ${bubbleClass} ${bubbleAlignment} w-100 rounded-2 p-3 mt-3">
+            <div class="d-flex ${textAlignment} mb-2">
+                <img src="${avatarURL}" class="rounded-circle" width="30" height="30" alt="${senderButtonValue}" />
+                <p class="fw-bold ms-2 mb-0">${senderButtonValue}</p>
+            </div>
+            <p class="text-start">${txtMessage}</p>
+            <p class="${textAlignment} ${timeColor} text-muted" style="font-size: 0.8rem;">${time}</p>
+        </div>
+    `;
 
     messageDiv.innerHTML += messageHTML;
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+    }
 }
 
 
 
-//  ------------------- time -------------------
-let date = new Date();
-let utcTime = (date.getTimezoneOffset() * 60000);
-let hours = new Date().getHours();
-let minutes = new Date().getMinutes();
-let ampm = hours >= 12 ? 'PM' : 'AM';
-let time = hours+"."+minutes+" "+ampm;
 
+//  ------------------- Get Time -------------------
+function getTime() {
+    let date = new Date();
+    let hours = new Date().getHours();
+    let minutes = new Date().getMinutes();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    let time = hours + "." + minutes + " " + ampm;
+    return time;
+}
