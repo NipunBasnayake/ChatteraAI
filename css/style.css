@@ -8,7 +8,26 @@
 .custom-header {
     color: #ffffff;
     font-weight: bold;
-    font-size: 2.5rem;
+    font-size: 3rem;
+    animation: colorChange 3s ease-in-out infinite;
+}
+
+@keyframes colorChange {
+    0% { color: #f951ff; }
+    50% { color: #27f8ff; }
+    100% { color: #2c96ff; }
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+    50% { transform: translateY(5px); }
+    70% { transform: translateY(-5px); }
+    100% { transform: translateY(0); }
+}
+
+.custom-footer{
+    animation: bounce 1s ease-in-out;
 }
 
 .custom-divider {
@@ -35,17 +54,28 @@
 }
 
 .custom-button {
-    background-color: #58a6ff;
-    border: none;
+    background-color: #58a6ff; 
     color: white;
     border-radius: 50px;
-    font-size: 1.1rem;
+    border: none;
     padding: 10px 20px;
-    transition: background-color 0.3s ease-in-out;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
 }
 
-.custom-button:active {
-    background-color: #387ec7;
+.custom-button:hover {
+    background-color: #0c67c9;
+    transform: scale(1.08); 
+}
+
+.custom-button i {
+    font-weight: bold;
+}
+
+.custom-button:hover i {
+    color: #ffffff;
+    transform: scale(1.1);
 }
 
 .custom-chatbox{

@@ -27,41 +27,40 @@ async function send() {
 function addMessage(sender, message, time) {
     let avatarURL, bubbleClass, alignmentClass, avatarPositionClass, timeColor;
 
+    let messageHTML = ``;
+
     if (sender === "Me") {
-        avatarURL = "images/UserAvatar.jpg";  
-        bubbleClass = "bg-secondary text-white";
-        alignmentClass = "justify-content-end";
-        timeColor = "text-white";
-    } else if (sender === "ChatterAI") {
-        avatarURL = "images/AIAvatar.png"; 
-        bubbleClass = "bg-white text-dark";
-        alignmentClass = "justify-content-start";
-        timeColor = "text-dark";
-    }
-
-    let messageHTML = `
-    <div class="d-flex ${alignmentClass} align-items-start w-100 my-2">
-        <div class="d-flex align-items-center">
-            <img src="${avatarURL}" class="rounded-circle me-2" width="40" height="40" alt="${sender}">
-            <div class="${bubbleClass} p-3 rounded-3 message-bubble" style="max-width: 75%; ${
-                sender === "Me" ? "border-top-right-radius: 0;" : "border-top-left-radius: 0;"
-            }">
-                <div class="fw-bold">${sender}</div>
-                <p class="mb-1">${message}</p>
-                <small class="text-muted ${timeColor}">${time}</small>
+        messageHTML = `
+            <div class="d-flex justify-content-end align-items-start w-100 my-2">
+                <div class="d-flex">
+                    <div class="bg-secondary text-white p-3 rounded-3" style="max-width: 75%; border-top-right-radius: 0;">
+                        <div class="fw-bold">${sender}</div>
+                        <p class="">${message}</p>
+                        <small class="text-muted">${time}</small>
+                    </div>
+                    <img src="images/UserAvatar.jpg" class="rounded-circle ms-2" width="40" height="40" alt="Me">
+                </div>
             </div>
-        </div>
-    </div>
-    `;
-
+        `;
+    } else if (sender === "ChatterAI") {
+        messageHTML = `
+            <div class="d-flex justify-content-start align-items-start w-100 my-2">
+                <div class="d-flex">
+                    <img src="images/AIAvatar.png" class="rounded-circle me-2" width="40" height="40" alt="ChatterAI">
+                    <div class="bg-white text-dark p-3 rounded-3" style="max-width: 75%; width: auto; white-space: normal;">
+                        <div class="fw-bold">${sender}</div>
+                        <p class="">${message}</p>
+                        <small class="text-muted">${time}</small>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
     messageDiv.innerHTML += messageHTML;
     messageDiv.scrollTop = messageDiv.scrollHeight;
 }
 
-
-
-
-// ------------------- Handle "Enter" Key for Message Sending -------------------
+// ------------------- Handle Enter -------------------
 document.getElementById("txtMessage").addEventListener("keypress", function (event) {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -114,11 +113,9 @@ async function getAIResponse(userMessage) {
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=",
         requestOptions
     );
-
     if (!response.ok) {
         throw new Error("Failed to fetch AI response");
     }
-
     let result = await response.json();
     return result.candidates[0].content.parts[0].text;
 }
