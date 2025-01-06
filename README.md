@@ -65,7 +65,7 @@ Each message includes a timestamp to show the time it was sent. The `getTime()` 
 ---
 
 ## **Screenshots**
-![ChatterAI UI](Screenshots/ChatterAIUI.png)
+![ChatterAI UI](Screenshots/Chatter.png)
 
 ---
 
