@@ -1,35 +1,91 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import Header from './components/Header';
+import ChatBox from './components/ChatBox';
+import ChatInput from './components/ChatInput';
+import { GEMINI_API_KEY } from './config';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const getTime = () => {
+    const date = new Date();
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${minutes < 10 ? '0' : ''}${minutes} ${ampm}`;
+  };
+
+  const getAIResponse = async (userMessage) => {
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: userMessage }] }],
+      }),
+    };
+
+    try {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch AI response');
+      }
+
+      const result = await response.json();
+      return result.candidates[0].content.parts[0].text;
+    } catch (error) {
+      console.error('Error fetching AI response:', error);
+      return 'Sorry, I encountered an error. Please try again.';
+    }
+  };
+
+  const handleSendMessage = async (message) => {
+    const currentTime = getTime();
+    
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: 'Me', message, time: currentTime },
+    ]);
+
+    setIsTyping(true);
+
+    try {
+      const aiResponse = await getAIResponse(message);
+      
+      setIsTyping(false);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'ChatterAI', message: aiResponse, time: getTime() },
+      ]);
+    } catch (error) {
+      console.error('Error handling message:', error);
+      setIsTyping(false);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: 'ChatterAI',
+          message: 'Sorry, I encountered an error. Please try again.',
+          time: getTime(),
+        },
+      ]);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="custom-body bg-dark">
+      <div className="container-fluid p-0">
+        <Header />
+        <ChatBox messages={messages} isTyping={isTyping} />
+        <ChatInput onSendMessage={handleSendMessage} />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
