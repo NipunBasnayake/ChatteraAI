@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 const ChatInput = ({ onSendMessage }) => {
   const [message, setMessage] = useState('');
+  const inputRef = useRef(null);
+  
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,22 +24,29 @@ const ChatInput = ({ onSendMessage }) => {
   };
 
   return (
-    <div className="custom-footer bg-dark py-3 position-fixed bottom-0 w-100">
-      <div className="container mb-5">
+    <div className="custom-footer py-3 position-fixed bottom-0 w-100">
+      <div className="container mb-4">
         <div className="row justify-content-center">
           <div className="col-12 col-md-10 col-lg-8">
             <form onSubmit={handleSubmit} className="d-flex align-items-center">
-              <input
-                type="text"
-                className="custom-input flex-grow-1 me-2"
-                placeholder="Message ChatterAI"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-              <button type="submit" className="custom-button">
-                <i className="bi bi-arrow-up"></i>
-              </button>
+              <div className="input-group">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  className="custom-input flex-grow-1"
+                  placeholder="Message ChatterAI..."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+                <button 
+                  type="submit" 
+                  className="custom-button d-flex align-items-center justify-content-center"
+                  disabled={!message.trim()}
+                >
+                  <i className="bi bi-send-fill"></i>
+                </button>
+              </div>
             </form>
           </div>
         </div>

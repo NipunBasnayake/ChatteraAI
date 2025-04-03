@@ -4,19 +4,25 @@
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  background-color: #1a1d21;
+  background-image: radial-gradient(#2c313a 1px, transparent 0);
+  background-size: 20px 20px;
 }
 
 .custom-header {
   color: #ffffff;
   font-weight: bold;
-  font-size: 3rem;
-  animation: colorChange 3s ease-in-out infinite;
+  font-size: 2.5rem;
+  animation: colorChange 5s ease-in-out infinite;
+  text-shadow: 0 0 10px rgba(89, 166, 255, 0.5);
+  letter-spacing: 1px;
 }
 
 @keyframes colorChange {
-  0% { color: #f951ff; }
-  50% { color: #27f8ff; }
-  100% { color: #2c96ff; }
+  0% { color: #5e72e4; }
+  33% { color: #11cdef; }
+  66% { color: #fb6340; }
+  100% { color: #5e72e4; }
 }
 
 @keyframes bounce {
@@ -29,13 +35,22 @@
 
 .custom-footer {
   animation: bounce 1s ease-in-out;
+  backdrop-filter: blur(10px);
+  background-color: rgba(26, 29, 33, 0.85);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .custom-divider {
   border-color: #58a6ff;
   border-width: 2px;
   border-style: solid;
-  margin-top: 30px;
+  margin-top: 15px;
+  box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+  opacity: 0.6;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .custom-input {
@@ -44,39 +59,43 @@
   border-radius: 50px;
   color: #e1e4e8;
   font-size: 1.1rem;
-  padding: 12px 15px;
+  padding: 12px 20px;
   width: 100%;
-  transition: border-color 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .custom-input:focus {
   border-color: #58a6ff;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.25), inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .custom-button {
-  background-color: #58a6ff; 
+  background-color: #58a6ff;
   color: white;
   border-radius: 50px;
   border: none;
-  padding: 10px 20px;
+  padding: 12px 20px;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .custom-button:hover {
   background-color: #0c67c9;
-  transform: scale(1.08); 
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.2);
+}
+
+.custom-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .custom-button i {
   font-weight: bold;
-}
-
-.custom-button:hover i {
-  color: #ffffff;
-  transform: scale(1.1);
 }
 
 .custom-chatbox {
@@ -85,8 +104,87 @@
   scrollbar-width: none;
   -ms-overflow-style: none;
   margin-bottom: 80px;
+  padding: 0 5px;
 }
 
 .custom-chatbox::-webkit-scrollbar {
   display: none;
+}
+
+.message-bubble-user {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border-top-right-radius: 0 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 75%;
+  transition: all 0.3s ease;
+}
+
+.message-bubble-user:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.message-bubble-ai {
+  background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+  border-top-left-radius: 0 !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-width: 75%;
+  transition: all 0.3s ease;
+}
+
+.message-bubble-ai:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+}
+
+.typing-indicator span {
+  height: 8px;
+  width: 8px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.4;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation: bounce 1s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation: bounce 1s infinite;
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation: bounce 1s infinite;
+  animation-delay: 0.4s;
+}
+
+.avatar-user {
+  border: 2px solid #4a5568;
+  transition: all 0.3s ease;
+}
+
+.avatar-ai {
+  border: 2px solid #2b5876;
+  transition: all 0.3s ease;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
